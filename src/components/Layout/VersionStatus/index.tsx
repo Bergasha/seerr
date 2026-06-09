@@ -34,7 +34,7 @@ const VersionStatus = ({ onClick }: VersionStatusProps) => {
 
   const versionStream =
     data.commitTag === 'local'
-      ? 'Keep it up! 👍'
+      ? 'Shayflix Version'
       : data.version.startsWith('develop-')
         ? intl.formatMessage(messages.streamdevelop)
         : intl.formatMessage(messages.streamstable);
