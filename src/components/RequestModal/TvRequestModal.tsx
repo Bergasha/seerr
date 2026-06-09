@@ -39,7 +39,7 @@ const messages = defineMessages('components.RequestModal', {
   requestseasons4k:
     'Request {seasonCount} {seasonCount, plural, one {Season} other {Seasons}} in 4K',
   alreadyrequested: 'Already Requested',
-  selectseason: 'Select Season(s)',
+  selectseason: 'Select a Season',
   season: 'Season',
   numberofepisodes: '# of Episodes',
   seasonnumber: 'Season {number}',
@@ -294,11 +294,10 @@ const TvRequestModal = ({
     }
 
     if (selectedSeasons.includes(seasonNumber)) {
-      setSelectedSeasons((seasons) =>
-        seasons.filter((sn) => sn !== seasonNumber)
-      );
+      setSelectedSeasons([]);
     } else {
-      setSelectedSeasons((seasons) => [...seasons, seasonNumber]);
+      // Only allow one season to be selected at a time
+      setSelectedSeasons([seasonNumber]);
     }
   };
 
@@ -307,23 +306,8 @@ const TvRequestModal = ({
   );
 
   const toggleAllSeasons = (): void => {
-    // If the user has a quota and not enough requests for all seasons, block toggleAllSeasons
-    if (
-      quota?.tv.limit &&
-      (quota?.tv.remaining ?? 0) < unrequestedSeasons.length
-    ) {
-      return;
-    }
-
-    if (
-      data &&
-      selectedSeasons.length >= 0 &&
-      selectedSeasons.length < unrequestedSeasons.length
-    ) {
-      setSelectedSeasons(unrequestedSeasons);
-    } else {
-      setSelectedSeasons([]);
-    }
+    // Single-season-at-a-time mode: select-all is disabled
+    return;
   };
 
   const isAllSeasons = (): boolean => {
@@ -525,40 +509,8 @@ const TvRequestModal = ({
                       className={`w-16 bg-gray-700/80 px-4 py-3 ${
                         !settings.currentSettings.partialRequestsEnabled &&
                         'hidden'
-                      }`}
-                    >
-                      <span
-                        role="checkbox"
-                        tabIndex={0}
-                        aria-checked={isAllSeasons()}
-                        onClick={() => toggleAllSeasons()}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === 'Space') {
-                            toggleAllSeasons();
-                          }
-                        }}
-                        className={`relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center pt-2 focus:outline-none ${
-                          quota?.tv.remaining &&
-                          quota.tv.limit &&
-                          quota.tv.remaining < unrequestedSeasons.length
-                            ? 'opacity-50'
-                            : ''
-                        }`}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className={`${
-                            isAllSeasons() ? 'bg-indigo-500' : 'bg-gray-800'
-                          } absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out`}
-                        />
-                        <span
-                          aria-hidden="true"
-                          className={`${
-                            isAllSeasons() ? 'translate-x-5' : 'translate-x-0'
-                          } absolute left-0 inline-block h-5 w-5 rounded-full border border-gray-200 bg-white shadow transition-transform duration-200 ease-in-out group-focus:border-blue-300 group-focus:ring`}
-                        />
-                      </span>
-                    </th>
+                      } hidden`}
+                    />
                     <th className="bg-gray-700/80 px-1 py-3 text-left text-xs font-medium uppercase leading-4 tracking-wider text-gray-200 md:px-6">
                       {intl.formatMessage(messages.season)}
                     </th>
