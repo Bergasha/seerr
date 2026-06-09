@@ -67,7 +67,7 @@ const VersionStatus = ({ onClick }: VersionStatusProps) => {
         <span className="font-bold">{versionStream}</span>
         <span className="truncate">
           {data.commitTag === 'local' ? (
-            '(⌐■_■)'
+            'Local'
           ) : data.commitsBehind > 0 ? (
             intl.formatMessage(messages.commitsbehind, {
               commitsBehind: data.commitsBehind,
