@@ -199,7 +199,6 @@ const Sidebar = ({
                             fill
                           />
                         </Link>
-                        </Link>
                       </span>
                     </div>
                     <nav className="mt-10 flex-1 space-y-4 px-4">
