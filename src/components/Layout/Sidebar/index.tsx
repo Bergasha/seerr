@@ -192,11 +192,13 @@ const Sidebar = ({
                     <div className="flex flex-shrink-0 items-center px-2">
                       <span className="w-full px-4 text-xl text-gray-50">
                         <Link href="/" className="relative block h-24 w-64">
-                          src="/logo_full.png"
-                          alt="Logo"
-                          className="object-contain"
-                          fill
-                        />
+                          <Image
+                            src="/logo_full.png"
+                            alt="Logo"
+                            className="object-contain"
+                            fill
+                          />
+                        </Link>
                         </Link>
                       </span>
                     </div>
