@@ -191,7 +191,7 @@ const Sidebar = ({
                   >
                     <div className="flex flex-shrink-0 items-center px-2">
                       <span className="w-full px-4 text-xl text-gray-50">
-                        <Link href="/" className="relative block h-24 w-64">
+                        <Link href="/" className="relative block h-36 w-64">
                           <Image
                             src="/logo_full.png"
                             alt="Logo"
@@ -259,7 +259,7 @@ const Sidebar = ({
             <div className="flex flex-1 flex-col overflow-y-auto pb-4">
               <div className="flex flex-shrink-0 items-center">
                 <span className="w-full px-4 py-2 text-2xl text-gray-50">
-                  <Link href="/" className="relative block h-24">
+                  <Link href="/" className="relative block h-36">
                     <Image
                       src="/logo_full.png"
                       alt="Logo"
