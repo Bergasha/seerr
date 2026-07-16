@@ -201,7 +201,7 @@ const Sidebar = ({
                         </Link>
                       </span>
                     </div>
-                    <nav className="mt-10 flex-1 space-y-4 px-4">
+                    <nav className="-mt-2 flex-1 space-y-4 px-4">
                       {SidebarLinks.filter((link) =>
                         link.requiredPermission
                           ? hasPermission(link.requiredPermission, {
@@ -270,7 +270,7 @@ const Sidebar = ({
                   </Link>
                 </span>
               </div>
-              <nav className="mt-8 flex-1 space-y-4 px-4">
+              <nav className="-mt-4 flex-1 space-y-4 px-4">
                 {SidebarLinks.filter((link) =>
                   link.requiredPermission
                     ? hasPermission(link.requiredPermission, {
