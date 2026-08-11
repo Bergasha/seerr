@@ -1,3 +1,4 @@
+import useSettings from '@app/hooks/useSettings';
 import defineMessages from '@app/utils/defineMessages';
 import {
   ArrowUpCircleIcon,
@@ -9,7 +10,6 @@ import type { StatusResponse } from '@server/interfaces/api/settingsInterfaces';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import useSWR from 'swr';
-
 const messages = defineMessages('components.Layout.VersionStatus', {
   streamdevelop: 'Seerr Develop',
   streamstable: 'Seerr Stable',
@@ -17,28 +17,27 @@ const messages = defineMessages('components.Layout.VersionStatus', {
   commitsbehind:
     '{commitsBehind} {commitsBehind, plural, one {commit} other {commits}} behind',
 });
-
 interface VersionStatusProps {
   onClick?: () => void;
 }
-
 const VersionStatus = ({ onClick }: VersionStatusProps) => {
+  const settings = useSettings();
   const intl = useIntl();
-  const { data } = useSWR<StatusResponse>('/api/v1/status', {
-    refreshInterval: 60 * 1000,
-  });
-
+  const { data } = useSWR<StatusResponse>(
+    `/api/v1/status?checkUpdateAvailable=${settings.currentSettings.versionCheck}`,
+    {
+      refreshInterval: 60 * 1000,
+    }
+  );
   if (!data) {
     return null;
   }
-
   const versionStream =
     data.commitTag === 'local'
       ? 'Shayflix Version'
       : data.version.startsWith('develop-')
         ? intl.formatMessage(messages.streamdevelop)
         : intl.formatMessage(messages.streamstable);
-
   return (
     <Link
       href="/settings/about"
@@ -65,25 +64,26 @@ const VersionStatus = ({ onClick }: VersionStatusProps) => {
       )}
       <div className="flex min-w-0 flex-1 flex-col truncate px-2 last:pr-0">
         <span className="font-bold">{versionStream}</span>
-        <span className="truncate">
-          {data.commitTag === 'local' ? (
-            'Local'
-          ) : data.commitsBehind > 0 ? (
-            intl.formatMessage(messages.commitsbehind, {
-              commitsBehind: data.commitsBehind,
-            })
-          ) : data.commitsBehind === -1 ? (
-            intl.formatMessage(messages.outofdate)
-          ) : (
-            <code className="bg-transparent p-0">
-              {data.version.replace('develop-', '')}
-            </code>
-          )}
-        </span>
+        {data.commitsBehind !== undefined && (
+          <span className="truncate">
+            {data.commitTag === 'local' ? (
+              'Local'
+            ) : data.commitsBehind > 0 ? (
+              intl.formatMessage(messages.commitsbehind, {
+                commitsBehind: data.commitsBehind,
+              })
+            ) : data.commitsBehind === -1 ? (
+              intl.formatMessage(messages.outofdate)
+            ) : (
+              <code className="bg-transparent p-0">
+                {data.version.replace('develop-', '')}
+              </code>
+            )}
+          </span>
+        )}
       </div>
       {data.updateAvailable && <ArrowUpCircleIcon className="h-6 w-6" />}
     </Link>
   );
 };
-
 export default VersionStatus;
